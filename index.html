@@ -1,25 +1,108 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <title>Mi primer Docker</title>
-    <style>
-        body{
-            font-family: Arial;
-            background:#f2f2f2;
-            text-align:center;
-            margin-top:100px;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GLSXS</title>
 
-        h1{
-            color:#0078D7;
-        }
-    </style>
+<style>
+body{
+    font-family: Arial, sans-serif;
+    text-align:center;
+    background:#f5f5f5;
+    margin:0;
+    padding:20px;
+}
+
+.logo{
+    font-size:80px;
+    font-weight:bold;
+    margin-top:30px;
+}
+
+.g{color:#4285F4;}
+.l{color:#EA4335;}
+.s1{color:#FBBC05;}
+.x{color:#4285F4;}
+.s2{color:#34A853;}
+
+p{
+    font-size:20px;
+}
+
+#gameArea{
+    width:500px;
+    height:300px;
+    background:white;
+    border:3px solid #ccc;
+    margin:30px auto;
+    position:relative;
+    overflow:hidden;
+}
+
+#target{
+    width:40px;
+    height:40px;
+    background:#EA4335;
+    position:absolute;
+    cursor:pointer;
+    border-radius:8px;
+}
+
+#score{
+    font-size:24px;
+    font-weight:bold;
+}
+</style>
 </head>
 <body>
 
-<h1>Mi primer sitio web en Docker</h1>
+<div class="logo">
+    <span class="g">G</span>
+    <span class="l">L</span>
+    <span class="s1">S</span>
+    <span class="x">X</span>
+    <span class="s2">S</span>
+</div>
 
-<p>Práctica de contenedores Docker.</p>
+<p>Bienvenido a GLSXS</p>
+
+<h2>Juego: Atrapa el cuadro</h2>
+
+<div id="score">Puntos: 0</div>
+
+<div id="gameArea">
+    <div id="target"></div>
+</div>
+
+<script>
+let score = 0;
+
+const target = document.getElementById("target");
+const scoreText = document.getElementById("score");
+
+function moveTarget(){
+    const gameArea = document.getElementById("gameArea");
+
+    const maxX = gameArea.clientWidth - 40;
+    const maxY = gameArea.clientHeight - 40;
+
+    const x = Math.random() * maxX;
+    const y = Math.random() * maxY;
+
+    target.style.left = x + "px";
+    target.style.top = y + "px";
+}
+
+target.addEventListener("click", () => {
+    score++;
+    scoreText.textContent = "Puntos: " + score;
+    moveTarget();
+});
+
+setInterval(moveTarget, 1200);
+moveTarget();
+</script>
 
 </body>
 </html>
