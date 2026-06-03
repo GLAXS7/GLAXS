@@ -6,68 +6,132 @@
 <title>GLSXS</title>
 
 <style>
-body{
-    font-family: Arial, sans-serif;
-    text-align:center;
-    background:#f5f5f5;
+*{
     margin:0;
-    padding:20px;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    background: #0a0a0a;
+    color:white;
+    font-family: 'Segoe UI', sans-serif;
+    text-align:center;
+    overflow-x:hidden;
 }
 
 .logo{
-    font-size:80px;
+    margin-top:40px;
+    font-size:100px;
     font-weight:bold;
-    margin-top:30px;
+    letter-spacing:5px;
 }
 
 .g{color:#4285F4;}
 .l{color:#EA4335;}
 .s1{color:#FBBC05;}
-.x{color:#4285F4;}
+.x{
+    color:#00ff88;
+    text-shadow:
+    0 0 10px #00ff88,
+    0 0 20px #00ff88,
+    0 0 40px #00ff88;
+}
 .s2{color:#34A853;}
 
-p{
-    font-size:20px;
+.subtitle{
+    margin-top:10px;
+    color:#00ff88;
+    font-size:22px;
+    text-shadow:0 0 10px #00ff88;
 }
 
-#gameArea{
-    width:500px;
-    height:300px;
-    background:white;
-    border:3px solid #ccc;
-    margin:30px auto;
-    position:relative;
-    overflow:hidden;
-}
-
-#target{
-    width:40px;
-    height:40px;
-    background:#EA4335;
-    position:absolute;
-    cursor:pointer;
-    border-radius:8px;
+.card{
+    width:90%;
+    max-width:700px;
+    margin:40px auto;
+    background:#111;
+    border:1px solid #00ff88;
+    border-radius:20px;
+    padding:25px;
+    box-shadow:0 0 20px rgba(0,255,136,.4);
 }
 
 #score{
-    font-size:24px;
-    font-weight:bold;
+    font-size:28px;
+    margin-bottom:15px;
+    color:#00ff88;
+}
+
+#gameArea{
+    width:100%;
+    height:350px;
+    border:2px solid #00ff88;
+    border-radius:15px;
+    position:relative;
+    overflow:hidden;
+    background:
+    radial-gradient(circle at center,
+    #101010,
+    #050505);
+}
+
+#target{
+    width:50px;
+    height:50px;
+    position:absolute;
+    border-radius:50%;
+    cursor:pointer;
+    background:#00ff88;
+    box-shadow:
+    0 0 10px #00ff88,
+    0 0 20px #00ff88,
+    0 0 40px #00ff88;
+    transition:.2s;
+}
+
+#target:hover{
+    transform:scale(1.2);
+}
+
+.info{
+    margin-top:15px;
+    color:#aaa;
+}
+
+.bg{
+    position:fixed;
+    width:100%;
+    height:100%;
+    top:0;
+    left:0;
+    z-index:-1;
+    background:
+    radial-gradient(circle at top,
+    rgba(0,255,136,.12),
+    transparent 40%);
 }
 </style>
 </head>
 <body>
 
+<div class="bg"></div>
+
 <div class="logo">
-    <span class="g">G</span>
-    <span class="l">L</span>
-    <span class="s1">S</span>
-    <span class="x">X</span>
-    <span class="s2">S</span>
+<span class="g">G</span>
+<span class="l">L</span>
+<span class="s1">S</span>
+<span class="x">X</span>
+<span class="s2">S</span>
 </div>
 
-<p>Bienvenido a GLSXS</p>
+<div class="subtitle">
+⚡ Bienvenido a GLSXS ⚡
+</div>
 
-<h2>Juego: Atrapa el cuadro</h2>
+<div class="card">
+
+<h2>🎮 Atrapa el Orbe Verde</h2>
 
 <div id="score">Puntos: 0</div>
 
@@ -75,17 +139,23 @@ p{
     <div id="target"></div>
 </div>
 
+<div class="info">
+Haz clic en el orbe antes de que cambie de posición.
+</div>
+
+</div>
+
 <script>
 let score = 0;
 
 const target = document.getElementById("target");
 const scoreText = document.getElementById("score");
+const gameArea = document.getElementById("gameArea");
 
 function moveTarget(){
-    const gameArea = document.getElementById("gameArea");
 
-    const maxX = gameArea.clientWidth - 40;
-    const maxY = gameArea.clientHeight - 40;
+    const maxX = gameArea.clientWidth - 50;
+    const maxY = gameArea.clientHeight - 50;
 
     const x = Math.random() * maxX;
     const y = Math.random() * maxY;
@@ -94,13 +164,17 @@ function moveTarget(){
     target.style.top = y + "px";
 }
 
-target.addEventListener("click", () => {
+target.addEventListener("click", ()=>{
+
     score++;
-    scoreText.textContent = "Puntos: " + score;
+
+    scoreText.innerHTML = "Puntos: " + score;
+
     moveTarget();
 });
 
-setInterval(moveTarget, 1200);
+setInterval(moveTarget, 1000);
+
 moveTarget();
 </script>
 
