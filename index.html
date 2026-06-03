@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -28,10 +27,7 @@ body{
     width:100%;
     height:100%;
     z-index:-1;
-    background:
-    radial-gradient(circle at top,
-    rgba(0,255,136,.15),
-    transparent 40%);
+    background:radial-gradient(circle at top, rgba(0,255,136,.15), transparent 40%);
 }
 
 .logo{
@@ -190,15 +186,13 @@ body{
 </div>
 
 <script>
-
 let score = 0;
 
 const target = document.getElementById("target");
 const scoreText = document.getElementById("score");
 const gameArea = document.getElementById("gameArea");
 
-function moveTarget(){
-
+function moveTarget() {
     const maxX = gameArea.clientWidth - 50;
     const maxY = gameArea.clientHeight - 50;
 
@@ -210,23 +204,14 @@ function moveTarget(){
 }
 
 target.addEventListener("click", () => {
-
     score++;
-
     scoreText.textContent = "Puntos: " + score;
-
     moveTarget();
 });
 
 setInterval(moveTarget, 1000);
-
 moveTarget();
-
 </script>
 
 </body>
 </html>
-```
-
-Con este código aparecerá **GLAXS** (G azul, L roja, A amarilla, X verde neón y S verde), el mensaje **"Bienvenido a GLAXS"** y el minijuego funcionando.
-
