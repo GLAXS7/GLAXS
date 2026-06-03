@@ -4,214 +4,44 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GLAXS</title>
-
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
-body{
-    background:#0a0a0a;
-    color:white;
-    font-family:'Segoe UI',sans-serif;
-    text-align:center;
-    overflow-x:hidden;
-}
-
-.bg{
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    z-index:-1;
-    background:radial-gradient(circle at top, rgba(0,255,136,.15), transparent 40%);
-}
-
-.logo{
-    margin-top:40px;
-    font-size:100px;
-    font-weight:bold;
-    letter-spacing:5px;
-}
-
-.g{
-    color:#4285F4;
-}
-
-.l{
-    color:#EA4335;
-}
-
-.a{
-    color:#FBBC05;
-}
-
-.x{
-    color:#00ff88;
-    text-shadow:
-    0 0 10px #00ff88,
-    0 0 20px #00ff88,
-    0 0 40px #00ff88,
-    0 0 80px #00ff88;
-}
-
-.s{
-    color:#34A853;
-}
-
-.subtitle{
-    margin-top:10px;
-    color:#00ff88;
-    font-size:22px;
-    text-shadow:0 0 10px #00ff88;
-}
-
-.card{
-    width:90%;
-    max-width:750px;
-    margin:40px auto;
-    padding:25px;
-    background:#111;
-    border:1px solid #00ff88;
-    border-radius:20px;
-    box-shadow:
-    0 0 15px rgba(0,255,136,.3),
-    0 0 30px rgba(0,255,136,.2);
-}
-
-.card h2{
-    margin-bottom:20px;
-}
-
-#score{
-    font-size:28px;
-    color:#00ff88;
-    margin-bottom:15px;
-    font-weight:bold;
-}
-
-#gameArea{
-    width:100%;
-    height:350px;
-    border:2px solid #00ff88;
-    border-radius:15px;
-    background:#050505;
-    position:relative;
-    overflow:hidden;
-}
-
-#target{
-    width:50px;
-    height:50px;
-    background:#00ff88;
-    border-radius:50%;
-    position:absolute;
-    cursor:pointer;
-    box-shadow:
-    0 0 10px #00ff88,
-    0 0 20px #00ff88,
-    0 0 40px #00ff88;
-    transition:.15s;
-}
-
-#target:hover{
-    transform:scale(1.2);
-}
-
-.info{
-    margin-top:15px;
-    color:#bdbdbd;
-}
-
-.footer{
-    margin:30px 0;
-    color:#777;
-    font-size:14px;
-}
-
-@media(max-width:600px){
-
-    .logo{
-        font-size:65px;
-    }
-
-    .subtitle{
-        font-size:18px;
-    }
-
-    #gameArea{
-        height:280px;
-    }
-}
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-<div class="bg"></div>
+<div class="background"></div>
 
-<div class="logo">
-    <span class="g">G</span>
-    <span class="l">L</span>
-    <span class="a">A</span>
-    <span class="x">X</span>
-    <span class="s">S</span>
-</div>
+<h1 class="logo">
+<span class="g">G</span>
+<span class="l">L</span>
+<span class="a">A</span>
+<span class="x">X</span>
+<span class="s">S</span>
+</h1>
 
-<div class="subtitle">
-    ⚡ Bienvenido a GLAXS ⚡
-</div>
+<p class="subtitle">
+💎 Recoge las gemas y evita al perseguidor rojo 💎
+</p>
 
 <div class="card">
 
-    <h2>🎮 Atrapa el Orbe Verde</h2>
+<div class="ui">
+<div>Nivel: <span id="level">1</span></div>
+<div>Puntos: <span id="score">0</span></div>
+</div>
 
-    <div id="score">Puntos: 0</div>
+<canvas id="game"></canvas>
 
-    <div id="gameArea">
-        <div id="target"></div>
-    </div>
-
-    <div class="info">
-        Haz clic sobre el orbe verde para ganar puntos.
-    </div>
+<div id="gameover">
+<h2>💀 GAME OVER 💀</h2>
+<p>El enemigo te atrapó.</p>
+<button onclick="location.reload()">
+Jugar otra vez
+</button>
+</div>
 
 </div>
 
-<div class="footer">
-    GLAXS © 2025
-</div>
-
-<script>
-let score = 0;
-
-const target = document.getElementById("target");
-const scoreText = document.getElementById("score");
-const gameArea = document.getElementById("gameArea");
-
-function moveTarget() {
-    const maxX = gameArea.clientWidth - 50;
-    const maxY = gameArea.clientHeight - 50;
-
-    const x = Math.random() * maxX;
-    const y = Math.random() * maxY;
-
-    target.style.left = x + "px";
-    target.style.top = y + "px";
-}
-
-target.addEventListener("click", () => {
-    score++;
-    scoreText.textContent = "Puntos: " + score;
-    moveTarget();
-});
-
-setInterval(moveTarget, 1000);
-moveTarget();
-</script>
+<script src="script.js"></script>
 
 </body>
 </html>
