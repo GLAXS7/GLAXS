@@ -13,11 +13,24 @@
 }
 
 body{
-    background: #0a0a0a;
+    background:#0a0a0a;
     color:white;
-    font-family: 'Segoe UI', sans-serif;
+    font-family:'Segoe UI',sans-serif;
     text-align:center;
     overflow-x:hidden;
+}
+
+.bg{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    z-index:-1;
+    background:
+    radial-gradient(circle at top,
+    rgba(0,255,136,.15),
+    transparent 40%);
 }
 
 .logo{
@@ -27,17 +40,30 @@ body{
     letter-spacing:5px;
 }
 
-.g{color:#4285F4;}
-.l{color:#EA4335;}
-.s1{color:#FBBC05;}
+.g{
+    color:#4285F4;
+}
+
+.l{
+    color:#EA4335;
+}
+
+.s1{
+    color:#FBBC05;
+}
+
 .x{
     color:#00ff88;
     text-shadow:
     0 0 10px #00ff88,
     0 0 20px #00ff88,
-    0 0 40px #00ff88;
+    0 0 40px #00ff88,
+    0 0 80px #00ff88;
 }
-.s2{color:#34A853;}
+
+.s2{
+    color:#34A853;
+}
 
 .subtitle{
     margin-top:10px;
@@ -48,19 +74,26 @@ body{
 
 .card{
     width:90%;
-    max-width:700px;
+    max-width:750px;
     margin:40px auto;
+    padding:25px;
     background:#111;
     border:1px solid #00ff88;
     border-radius:20px;
-    padding:25px;
-    box-shadow:0 0 20px rgba(0,255,136,.4);
+    box-shadow:
+    0 0 15px rgba(0,255,136,.3),
+    0 0 30px rgba(0,255,136,.2);
+}
+
+.card h2{
+    margin-bottom:20px;
 }
 
 #score{
     font-size:28px;
-    margin-bottom:15px;
     color:#00ff88;
+    margin-bottom:15px;
+    font-weight:bold;
 }
 
 #gameArea{
@@ -68,26 +101,23 @@ body{
     height:350px;
     border:2px solid #00ff88;
     border-radius:15px;
+    background:#050505;
     position:relative;
     overflow:hidden;
-    background:
-    radial-gradient(circle at center,
-    #101010,
-    #050505);
 }
 
 #target{
     width:50px;
     height:50px;
-    position:absolute;
-    border-radius:50%;
-    cursor:pointer;
     background:#00ff88;
+    border-radius:50%;
+    position:absolute;
+    cursor:pointer;
     box-shadow:
     0 0 10px #00ff88,
     0 0 20px #00ff88,
     0 0 40px #00ff88;
-    transition:.2s;
+    transition:.15s;
 }
 
 #target:hover{
@@ -96,56 +126,70 @@ body{
 
 .info{
     margin-top:15px;
-    color:#aaa;
+    color:#bdbdbd;
 }
 
-.bg{
-    position:fixed;
-    width:100%;
-    height:100%;
-    top:0;
-    left:0;
-    z-index:-1;
-    background:
-    radial-gradient(circle at top,
-    rgba(0,255,136,.12),
-    transparent 40%);
+.footer{
+    margin:30px 0;
+    color:#777;
+    font-size:14px;
+}
+
+@media(max-width:600px){
+
+    .logo{
+        font-size:65px;
+    }
+
+    .subtitle{
+        font-size:18px;
+    }
+
+    #gameArea{
+        height:280px;
+    }
 }
 </style>
 </head>
+
 <body>
 
 <div class="bg"></div>
 
 <div class="logo">
-<span class="g">G</span>
-<span class="l">L</span>
-<span class="s1">S</span>
-<span class="x">X</span>
-<span class="s2">S</span>
+    <span class="g">G</span>
+    <span class="l">L</span>
+    <span class="s1">S</span>
+    <span class="x">X</span>
+    <span class="s2">S</span>
 </div>
 
 <div class="subtitle">
-⚡ Bienvenido a GLSXS ⚡
+    ⚡ Bienvenido a GLSXS ⚡
 </div>
 
 <div class="card">
 
-<h2>🎮 Atrapa el Orbe Verde</h2>
+    <h2>🎮 Atrapa el Orbe Verde</h2>
 
-<div id="score">Puntos: 0</div>
+    <div id="score">Puntos: 0</div>
 
-<div id="gameArea">
-    <div id="target"></div>
+    <div id="gameArea">
+        <div id="target"></div>
+    </div>
+
+    <div class="info">
+        Haz clic sobre el orbe verde para ganar puntos.
+    </div>
+
 </div>
 
-<div class="info">
-Haz clic en el orbe antes de que cambie de posición.
-</div>
-
+<div class="footer">
+    GLSXS © 2025
 </div>
 
 <script>
+
 let score = 0;
 
 const target = document.getElementById("target");
@@ -164,11 +208,11 @@ function moveTarget(){
     target.style.top = y + "px";
 }
 
-target.addEventListener("click", ()=>{
+target.addEventListener("click", () => {
 
     score++;
 
-    scoreText.innerHTML = "Puntos: " + score;
+    scoreText.textContent = "Puntos: " + score;
 
     moveTarget();
 });
@@ -176,6 +220,7 @@ target.addEventListener("click", ()=>{
 setInterval(moveTarget, 1000);
 
 moveTarget();
+
 </script>
 
 </body>
