@@ -3,45 +3,145 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GLAXS</title>
-<link rel="stylesheet" href="style.css">
+<title>Bienvenido</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    overflow:hidden;
+    background:linear-gradient(135deg,#0f172a,#1e293b,#312e81);
+    height:100vh;
+}
+
+#game{
+    position:relative;
+    width:100%;
+    height:100vh;
+}
+
+h1{
+    color:white;
+    text-align:center;
+    padding-top:20px;
+}
+
+#score{
+    color:white;
+    text-align:center;
+    font-size:24px;
+    margin-top:10px;
+}
+
+.star{
+    position:absolute;
+    font-size:40px;
+    cursor:pointer;
+    animation:pop 0.3s ease;
+}
+
+@keyframes pop{
+    from{
+        transform:scale(0);
+    }
+    to{
+        transform:scale(1);
+    }
+}
+
+#finish{
+    display:none;
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    text-align:center;
+    color:white;
+}
+
+button{
+    margin-top:20px;
+    padding:15px 30px;
+    border:none;
+    border-radius:10px;
+    font-size:18px;
+    cursor:pointer;
+    background:#facc15;
+    transition:.3s;
+}
+
+button:hover{
+    transform:scale(1.1);
+}
+</style>
 </head>
+
 <body>
 
-<div class="background"></div>
+<div id="game">
+    <h1>⭐ Atrapa las estrellas ⭐</h1>
+    <div id="score">Puntos: 0</div>
 
-<h1 class="logo">
-<span class="g">G</span>
-<span class="l">L</span>
-<span class="a">A</span>
-<span class="x">X</span>
-<span class="s">S</span>
-</h1>
-
-<p class="subtitle">
-💎 Recoge las gemas y evita al perseguidor rojo 💎
-</p>
-
-<div class="card">
-
-<div class="ui">
-<div>Nivel: <span id="level">1</span></div>
-<div>Puntos: <span id="score">0</span></div>
+    <div id="finish">
+        <h2>¡Bienvenido!</h2>
+        <p id="finalScore"></p>
+        <button onclick="entrar()">Entrar a la web</button>
+    </div>
 </div>
 
-<canvas id="game"></canvas>
+<script>
+let puntos = 0;
+let tiempo = 15;
 
-<div id="gameover">
-<h2>💀 GAME OVER 💀</h2>
-<p>El enemigo te atrapó.</p>
-<button onclick="location.reload()">
-Jugar otra vez
-</button>
-</div>
+const score = document.getElementById("score");
+const game = document.getElementById("game");
 
-</div>
+function crearEstrella(){
+    const estrella = document.createElement("div");
+    estrella.classList.add("star");
+    estrella.innerHTML = "⭐";
 
-<script src="script.js"></script>
+    estrella.style.left = Math.random() * (window.innerWidth - 50) + "px";
+    estrella.style.top = Math.random() * (window.innerHeight - 100) + "px";
+
+    estrella.onclick = () => {
+        puntos++;
+        score.innerHTML = "Puntos: " + puntos;
+        estrella.remove();
+    };
+
+    game.appendChild(estrella);
+
+    setTimeout(() => {
+        estrella.remove();
+    }, 1200);
+}
+
+const intervalo = setInterval(crearEstrella, 500);
+
+const timer = setInterval(() => {
+    tiempo--;
+
+    if(tiempo <= 0){
+        clearInterval(intervalo);
+        clearInterval(timer);
+
+        document.getElementById("finish").style.display = "block";
+        document.getElementById("finalScore").innerHTML =
+        "Conseguiste " + puntos + " puntos";
+    }
+},1000);
+
+function entrar(){
+    // Cambia esta URL por tu página principal
+    window.location.href = "home.html";
+}
+</script>
 
 </body>
 </html>
