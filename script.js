@@ -1,3 +1,5 @@
+alert("SCRIPT CARGADO");
+
 const canvas = document.getElementById("space");
 const ctx = canvas.getContext("2d");
 
