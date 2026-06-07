@@ -8,10 +8,12 @@ font-family:'Segoe UI',sans-serif;
 body{
 overflow:hidden;
 background:
-radial-gradient(circle at center,
+radial-gradient(
+circle at center,
 #09122b 0%,
 #030712 50%,
-#000000 100%);
+#000000 100%
+);
 }
 
 canvas{
@@ -109,8 +111,7 @@ transition:.3s;
 
 button:hover{
 
-transform:
-scale(1.1);
+transform:scale(1.1);
 
 box-shadow:
 0 0 30px cyan,
@@ -151,6 +152,37 @@ border:
 
 box-shadow:
 0 0 15px rgba(0,255,255,.4);
+
+}
+
+#controls{
+
+position:absolute;
+
+bottom:20px;
+left:50%;
+
+transform:
+translateX(-50%);
+
+color:white;
+
+font-size:18px;
+
+background:
+rgba(0,0,0,.5);
+
+padding:12px 20px;
+
+border-radius:12px;
+
+border:
+1px solid cyan;
+
+box-shadow:
+0 0 15px cyan;
+
+z-index:100;
 
 }
 
