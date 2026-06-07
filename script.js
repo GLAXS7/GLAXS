@@ -1,28 +1,11 @@
-alert("SCRIPT CARGADO");
-
 const canvas = document.getElementById("space");
 const ctx = canvas.getContext("2d");
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-window.addEventListener("resize", () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-});
-
-const stars = [];
-
-for(let i=0;i<1200;i++){
-    stars.push({
-        x:Math.random()*canvas.width,
-        y:Math.random()*canvas.height,
-        r:Math.random()*2
-    });
-}
-
-let orbit = 0;
 let score = 0;
+let lives = 3;
 
 let shipX = canvas.width/2;
 let shipY = canvas.height-180;
@@ -30,140 +13,138 @@ let shipY = canvas.height-180;
 const keys = {};
 
 window.addEventListener("keydown",(e)=>{
-    keys[e.key] = true;
+    keys[e.key]=true;
 });
 
 window.addEventListener("keyup",(e)=>{
-    keys[e.key] = false;
+    keys[e.key]=false;
 });
 
-function drawPlanet(x,y,r,color){
-    ctx.beginPath();
-    ctx.arc(x,y,r,0,Math.PI*2);
-    ctx.fillStyle=color;
-    ctx.fill();
+const stars=[];
+const crystals=[];
+const asteroids=[];
+
+for(let i=0;i<1000;i++){
+    stars.push({
+        x:Math.random()*canvas.width,
+        y:Math.random()*canvas.height,
+        r:Math.random()*2
+    });
+}
+
+function spawnCrystal(){
+    crystals.push({
+        x:Math.random()*canvas.width,
+        y:Math.random()*canvas.height
+    });
+}
+
+function spawnAsteroid(){
+    asteroids.push({
+        x:Math.random()*canvas.width,
+        y:-50,
+        size:20+Math.random()*30,
+        speed:2+Math.random()*4
+    });
+}
+
+setInterval(spawnCrystal,1200);
+setInterval(spawnAsteroid,1500);
+
+function drawStars(){
+
+    stars.forEach(s=>{
+
+        ctx.fillStyle="white";
+
+        ctx.fillRect(
+            s.x,
+            s.y,
+            s.r,
+            s.r
+        );
+
+    });
+
 }
 
 function drawSaturn(){
 
     const x=250;
-    const y=250;
+    const y=220;
 
     ctx.save();
     ctx.translate(x,y);
-    ctx.rotate(0.4);
+    ctx.rotate(.4);
 
-    ctx.strokeStyle="rgba(255,220,180,.8)";
-    ctx.lineWidth=18;
+    ctx.strokeStyle="#d8c39a";
+    ctx.lineWidth=22;
 
     ctx.beginPath();
-    ctx.ellipse(0,0,140,45,0,0,Math.PI*2);
+    ctx.ellipse(0,0,170,55,0,0,Math.PI*2);
+    ctx.stroke();
+
+    ctx.lineWidth=8;
+
+    ctx.beginPath();
+    ctx.ellipse(0,0,200,70,0,0,Math.PI*2);
     ctx.stroke();
 
     ctx.restore();
 
-    drawPlanet(x,y,90,"#d6a96c");
-}
+    ctx.beginPath();
+    ctx.arc(x,y,95,0,Math.PI*2);
 
-function drawJupiter(){
-
-    drawPlanet(
-        canvas.width-260,
-        220,
-        120,
-        "#c98052"
+    const g=
+    ctx.createRadialGradient(
+    x-30,y-30,10,
+    x,y,120
     );
 
+    g.addColorStop(0,"#fff4c4");
+    g.addColorStop(1,"#c18b4c");
+
+    ctx.fillStyle=g;
+    ctx.fill();
 }
 
 function drawEarth(){
 
-    drawPlanet(
-        canvas.width-280,
-        canvas.height-220,
-        110,
-        "#2f7cff"
+    const x=canvas.width-250;
+    const y=canvas.height-220;
+
+    ctx.beginPath();
+    ctx.arc(x,y,110,0,Math.PI*2);
+
+    const g=
+    ctx.createRadialGradient(
+    x-30,y-30,20,
+    x,y,120
     );
 
-}
+    g.addColorStop(0,"#5ec8ff");
+    g.addColorStop(1,"#1b5cff");
 
-function drawMoon(){
+    ctx.fillStyle=g;
+    ctx.fill();
 
-    orbit += 0.01;
+    ctx.fillStyle="green";
 
-    const x =
-        canvas.width-280 +
-        Math.cos(orbit)*180;
+    ctx.beginPath();
+    ctx.arc(x-25,y-10,25,0,Math.PI*2);
+    ctx.fill();
 
-    const y =
-        canvas.height-220 +
-        Math.sin(orbit)*180;
-
-    drawPlanet(x,y,25,"#dddddd");
-}
-
-let crystals = [];
-
-function spawnCrystal(){
-
-    crystals.push({
-        x:Math.random()*canvas.width,
-        y:Math.random()*canvas.height
-    });
-
-}
-
-setInterval(spawnCrystal,1000);
-
-function drawCrystals(){
-
-    crystals = crystals.filter(c=>{
-
-        const dx = c.x - shipX;
-        const dy = c.y - shipY;
-
-        const distance =
-            Math.sqrt(dx*dx + dy*dy);
-
-        if(distance < 90){
-
-            score++;
-
-            const scoreElement =
-                document.getElementById("score");
-
-            if(scoreElement){
-                scoreElement.textContent = score;
-            }
-
-            return false;
-        }
-
-        ctx.fillStyle="#bb66ff";
-
-        ctx.beginPath();
-        ctx.moveTo(c.x,c.y-15);
-        ctx.lineTo(c.x+10,c.y);
-        ctx.lineTo(c.x,c.y+15);
-        ctx.lineTo(c.x-10,c.y);
-        ctx.fill();
-
-        return true;
-    });
+    ctx.beginPath();
+    ctx.arc(x+30,y+25,18,0,Math.PI*2);
+    ctx.fill();
 }
 
 function drawAlienShip(){
 
-    if(keys["ArrowLeft"]) shipX -= 6;
-    if(keys["ArrowRight"]) shipX += 6;
-    if(keys["ArrowUp"]) shipY -= 6;
-    if(keys["ArrowDown"]) shipY += 6;
-
-    if(shipX < 80) shipX = 80;
-    if(shipX > canvas.width-80) shipX = canvas.width-80;
-
-    if(shipY < 80) shipY = 80;
-    if(shipY > canvas.height-80) shipY = canvas.height-80;
+    if(keys["ArrowLeft"]) shipX-=6;
+    if(keys["ArrowRight"]) shipX+=6;
+    if(keys["ArrowUp"]) shipY-=6;
+    if(keys["ArrowDown"]) shipY+=6;
 
     ctx.fillStyle="silver";
 
@@ -179,7 +160,8 @@ function drawAlienShip(){
     );
     ctx.fill();
 
-    ctx.fillStyle="rgba(150,255,255,.5)";
+    ctx.fillStyle=
+    "rgba(100,255,255,.5)";
 
     ctx.beginPath();
     ctx.arc(
@@ -197,19 +179,96 @@ function drawAlienShip(){
         shipX-16,
         shipY-10
     );
+}
 
-    ctx.strokeStyle="lime";
-    ctx.lineWidth=3;
+function drawCrystals(){
 
-    ctx.beginPath();
-    ctx.moveTo(shipX,shipY);
-    ctx.lineTo(shipX,shipY+120);
-    ctx.stroke();
+    for(let i=crystals.length-1;i>=0;i--){
+
+        const c=crystals[i];
+
+        ctx.fillStyle="#bb66ff";
+
+        ctx.beginPath();
+        ctx.moveTo(c.x,c.y-15);
+        ctx.lineTo(c.x+10,c.y);
+        ctx.lineTo(c.x,c.y+15);
+        ctx.lineTo(c.x-10,c.y);
+        ctx.fill();
+
+        const d=Math.hypot(
+            c.x-shipX,
+            c.y-shipY
+        );
+
+        if(d<80){
+
+            score++;
+
+            document.getElementById(
+            "score"
+            ).textContent=score;
+
+            crystals.splice(i,1);
+
+            if(score>=20){
+
+                alert("🏆 GANASTE LA MISIÓN");
+
+                score=0;
+            }
+        }
+    }
+}
+
+function drawAsteroids(){
+
+    for(let i=asteroids.length-1;i>=0;i--){
+
+        const a=asteroids[i];
+
+        a.y+=a.speed;
+
+        ctx.fillStyle="#777";
+
+        ctx.beginPath();
+        ctx.arc(
+            a.x,
+            a.y,
+            a.size,
+            0,
+            Math.PI*2
+        );
+        ctx.fill();
+
+        const d=Math.hypot(
+            a.x-shipX,
+            a.y-shipY
+        );
+
+        if(d<a.size+40){
+
+            lives--;
+
+            document.getElementById(
+            "lives"
+            ).textContent=lives;
+
+            asteroids.splice(i,1);
+
+            if(lives<=0){
+
+                alert("💀 GAME OVER");
+
+                location.reload();
+            }
+        }
+    }
 }
 
 function animate(){
 
-    ctx.fillStyle="#01030f";
+    ctx.fillStyle="#020617";
     ctx.fillRect(
         0,
         0,
@@ -217,35 +276,18 @@ function animate(){
         canvas.height
     );
 
-    stars.forEach(s=>{
-
-        ctx.fillStyle="white";
-
-        ctx.fillRect(
-            s.x,
-            s.y,
-            s.r,
-            s.r
-        );
-
-    });
-
+    drawStars();
     drawSaturn();
-    drawJupiter();
     drawEarth();
-    drawMoon();
 
     drawCrystals();
+    drawAsteroids();
 
     drawAlienShip();
 
-    requestAnimationFrame(animate);
+    requestAnimationFrame(
+        animate
+    );
 }
 
 animate();
-
-document.getElementById("startBtn").onclick = ()=>{
-
-    document.querySelector(".center").style.display = "none";
-
-};
