@@ -3,138 +3,218 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GLAXS</title>
+<title>GLAXS Universe</title>
 
 <style>
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+margin:0;
+padding:0;
+box-sizing:border-box;
 }
 
 body{
-    overflow:hidden;
-    background:#050816;
-    font-family:Arial,sans-serif;
+overflow:hidden;
+background:#000;
+font-family:Arial,sans-serif;
 }
 
 canvas{
-    position:fixed;
-    top:0;
-    left:0;
+display:block;
 }
 
-.container{
-    position:absolute;
-    top:50%;
-    left:50%;
-    transform:translate(-50%,-50%);
-    text-align:center;
-    z-index:10;
+#ui{
+position:absolute;
+top:20px;
+left:20px;
+color:white;
+font-size:28px;
+font-weight:bold;
+z-index:10;
+text-shadow:0 0 10px cyan;
 }
 
-h1{
-    color:white;
-    font-size:5rem;
-    letter-spacing:8px;
-    text-shadow:0 0 20px #00ffff;
-    animation: glow 2s infinite alternate;
+#title{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+font-size:70px;
+font-weight:bold;
+color:white;
+text-shadow:0 0 30px cyan;
+animation:fadeOut 4s forwards;
+pointer-events:none;
 }
 
-p{
-    color:#aaa;
-    margin-top:15px;
-    font-size:1.2rem;
-}
-
-button{
-    margin-top:30px;
-    padding:15px 35px;
-    border:none;
-    border-radius:30px;
-    background:#00ffff;
-    color:black;
-    font-size:18px;
-    font-weight:bold;
-    cursor:pointer;
-    transition:.3s;
-}
-
-button:hover{
-    transform:scale(1.1);
-    box-shadow:0 0 20px cyan;
-}
-
-@keyframes glow{
-    from{
-        text-shadow:0 0 10px cyan;
-    }
-    to{
-        text-shadow:0 0 40px cyan;
-    }
+@keyframes fadeOut{
+0%{opacity:1;}
+100%{opacity:0;}
 }
 </style>
 </head>
 <body>
 
-<canvas id="space"></canvas>
+<div id="ui">⚡ Energía: <span id="score">0</span></div>
+<div id="title">🚀 GLAXS UNIVERSE 🚀</div>
 
-<div class="container">
-    <h1>GLAXS</h1>
-    <p>Bienvenido al universo digital</p>
-    <button onclick="entrar()">ENTRAR</button>
-</div>
+<canvas id="canvas"></canvas>
 
 <script>
-const canvas = document.getElementById("space");
+const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
+function resize(){
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener("resize", resize);
+
+let score = 0;
 
 const stars = [];
-
-for(let i=0;i<250;i++){
-    stars.push({
-        x:Math.random()*canvas.width,
-        y:Math.random()*canvas.height,
-        size:Math.random()*2,
-        speed:Math.random()*2+0.5
-    });
+for(let i=0;i<1000;i++){
+stars.push({
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+size:Math.random()*2+1
+});
 }
 
-function animate(){
-    ctx.fillStyle="#050816";
-    ctx.fillRect(0,0,canvas.width,canvas.height);
+const ship = {
+x:canvas.width/2,
+y:canvas.height-100,
+speed:7
+};
 
-    ctx.fillStyle="white";
+const keys = {};
 
-    stars.forEach(star=>{
-        ctx.beginPath();
-        ctx.arc(star.x,star.y,star.size,0,Math.PI*2);
-        ctx.fill();
-
-        star.y += star.speed;
-
-        if(star.y > canvas.height){
-            star.y = 0;
-            star.x = Math.random()*canvas.width;
-        }
-    });
-
-    requestAnimationFrame(animate);
-}
-
-animate();
-
-window.addEventListener("resize",()=>{
-    canvas.width=window.innerWidth;
-    canvas.height=window.innerHeight;
+window.addEventListener("keydown",e=>{
+keys[e.key]=true;
 });
 
-function entrar(){
-    alert("Bienvenido a GLAXS 🚀");
+window.addEventListener("keyup",e=>{
+keys[e.key]=false;
+});
+
+const energies=[];
+
+function spawnEnergy(){
+energies.push({
+x:Math.random()*canvas.width,
+y:-20,
+r:12
+});
 }
+
+setInterval(spawnEnergy,800);
+
+function drawStars(){
+ctx.fillStyle="white";
+
+stars.forEach(star=>{
+ctx.fillRect(star.x,star.y,star.size,star.size);
+
+star.y+=0.3;
+
+if(star.y>canvas.height){
+star.y=0;
+star.x=Math.random()*canvas.width;
+}
+});
+}
+
+let angle=0;
+
+function drawPlanets(){
+
+angle += 0.01;
+
+ctx.beginPath();
+ctx.arc(180,150,70,0,Math.PI*2);
+ctx.fillStyle="#3498db";
+ctx.fill();
+
+ctx.beginPath();
+ctx.arc(canvas.width-220,220,110,0,Math.PI*2);
+ctx.fillStyle="#d35400";
+ctx.fill();
+
+let moonX = canvas.width/2 + Math.cos(angle)*120;
+let moonY = 150 + Math.sin(angle)*120;
+
+ctx.beginPath();
+ctx.arc(canvas.width/2,150,40,0,Math.PI*2);
+ctx.fillStyle="#cccccc";
+ctx.fill();
+
+ctx.beginPath();
+ctx.arc(moonX,moonY,15,0,Math.PI*2);
+ctx.fillStyle="white";
+ctx.fill();
+}
+
+function drawShip(){
+
+if(keys["ArrowLeft"]) ship.x -= ship.speed;
+if(keys["ArrowRight"]) ship.x += ship.speed;
+if(keys["ArrowUp"]) ship.y -= ship.speed;
+if(keys["ArrowDown"]) ship.y += ship.speed;
+
+ctx.fillStyle="cyan";
+
+ctx.beginPath();
+ctx.moveTo(ship.x,ship.y-20);
+ctx.lineTo(ship.x-15,ship.y+20);
+ctx.lineTo(ship.x+15,ship.y+20);
+ctx.closePath();
+ctx.fill();
+
+ctx.fillStyle="orange";
+ctx.fillRect(ship.x-4,ship.y+20,8,10);
+}
+
+function drawEnergy(){
+
+energies.forEach((e,index)=>{
+
+e.y += 3;
+
+ctx.beginPath();
+ctx.arc(e.x,e.y,e.r,0,Math.PI*2);
+ctx.fillStyle="#00ff00";
+ctx.fill();
+
+let dx = e.x - ship.x;
+let dy = e.y - ship.y;
+let dist = Math.sqrt(dx*dx + dy*dy);
+
+if(dist < 25){
+score++;
+document.getElementById("score").textContent = score;
+energies.splice(index,1);
+}
+
+if(e.y > canvas.height){
+energies.splice(index,1);
+}
+});
+}
+
+function gameLoop(){
+
+ctx.fillStyle="#000";
+ctx.fillRect(0,0,canvas.width,canvas.height);
+
+drawStars();
+drawPlanets();
+drawShip();
+drawEnergy();
+
+requestAnimationFrame(gameLoop);
+}
+
+gameLoop();
 </script>
 
 </body>
