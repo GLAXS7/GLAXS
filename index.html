@@ -4,43 +4,52 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GLAXS Universe</title>
+
 <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<div id="intro">
-
+<!-- JUEGO -->
 <canvas id="space"></canvas>
 
-<div class="center">
+<!-- PORTADA -->
+<div id="intro">
 
-<div class="alienIcon">👽</div>
+    <div class="center">
 
-<h1>GLAXS</h1>
+        <div class="alienIcon">👽</div>
 
-<p>Explora • Descubre • Conquista</p>
+        <h1>GLAXS</h1>
 
-<button id="startBtn">
-🚀 INICIAR MISIÓN
-</button>
+        <p>Explora • Descubre • Conquista</p>
+
+        <button id="startBtn">
+            🚀 INICIAR MISIÓN
+        </button>
+
+    </div>
 
 </div>
 
-</div>
-
+<!-- HUD -->
 <div id="hud">
 
-<div>
-💎 Cristales:
-<span id="score">0</span>
+    <div>
+        💎 Cristales:
+        <span id="score">0</span>
+    </div>
+
+    <div>
+        ❤️ Vidas:
+        <span id="lives">3</span>
+    </div>
+
 </div>
 
-<div>
-❤️ Vidas:
-<span id="lives">3</span>
-</div>
-
+<!-- CONTROLES -->
+<div id="controls">
+    ⌨️ Usa las flechas ← ↑ → ↓ para mover el OVNI
 </div>
 
 <script src="script.js"></script>
