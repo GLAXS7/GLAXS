@@ -3,143 +3,137 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bienvenido</title>
+<title>GLAXS</title>
 
 <style>
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:Arial, sans-serif;
 }
 
 body{
     overflow:hidden;
-    background:linear-gradient(135deg,#0f172a,#1e293b,#312e81);
-    height:100vh;
+    background:#050816;
+    font-family:Arial,sans-serif;
 }
 
-#game{
-    position:relative;
-    width:100%;
-    height:100vh;
+canvas{
+    position:fixed;
+    top:0;
+    left:0;
 }
 
-h1{
-    color:white;
-    text-align:center;
-    padding-top:20px;
-}
-
-#score{
-    color:white;
-    text-align:center;
-    font-size:24px;
-    margin-top:10px;
-}
-
-.star{
-    position:absolute;
-    font-size:40px;
-    cursor:pointer;
-    animation:pop 0.3s ease;
-}
-
-@keyframes pop{
-    from{
-        transform:scale(0);
-    }
-    to{
-        transform:scale(1);
-    }
-}
-
-#finish{
-    display:none;
+.container{
     position:absolute;
     top:50%;
     left:50%;
     transform:translate(-50%,-50%);
     text-align:center;
+    z-index:10;
+}
+
+h1{
     color:white;
+    font-size:5rem;
+    letter-spacing:8px;
+    text-shadow:0 0 20px #00ffff;
+    animation: glow 2s infinite alternate;
+}
+
+p{
+    color:#aaa;
+    margin-top:15px;
+    font-size:1.2rem;
 }
 
 button{
-    margin-top:20px;
-    padding:15px 30px;
+    margin-top:30px;
+    padding:15px 35px;
     border:none;
-    border-radius:10px;
+    border-radius:30px;
+    background:#00ffff;
+    color:black;
     font-size:18px;
+    font-weight:bold;
     cursor:pointer;
-    background:#facc15;
     transition:.3s;
 }
 
 button:hover{
     transform:scale(1.1);
+    box-shadow:0 0 20px cyan;
+}
+
+@keyframes glow{
+    from{
+        text-shadow:0 0 10px cyan;
+    }
+    to{
+        text-shadow:0 0 40px cyan;
+    }
 }
 </style>
 </head>
-
 <body>
 
-<div id="game">
-    <h1>⭐ Atrapa las estrellas ⭐</h1>
-    <div id="score">Puntos: 0</div>
+<canvas id="space"></canvas>
 
-    <div id="finish">
-        <h2>¡Bienvenido!</h2>
-        <p id="finalScore"></p>
-        <button onclick="entrar()">Entrar a la web</button>
-    </div>
+<div class="container">
+    <h1>GLAXS</h1>
+    <p>Bienvenido al universo digital</p>
+    <button onclick="entrar()">ENTRAR</button>
 </div>
 
 <script>
-let puntos = 0;
-let tiempo = 15;
+const canvas = document.getElementById("space");
+const ctx = canvas.getContext("2d");
 
-const score = document.getElementById("score");
-const game = document.getElementById("game");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
-function crearEstrella(){
-    const estrella = document.createElement("div");
-    estrella.classList.add("star");
-    estrella.innerHTML = "⭐";
+const stars = [];
 
-    estrella.style.left = Math.random() * (window.innerWidth - 50) + "px";
-    estrella.style.top = Math.random() * (window.innerHeight - 100) + "px";
-
-    estrella.onclick = () => {
-        puntos++;
-        score.innerHTML = "Puntos: " + puntos;
-        estrella.remove();
-    };
-
-    game.appendChild(estrella);
-
-    setTimeout(() => {
-        estrella.remove();
-    }, 1200);
+for(let i=0;i<250;i++){
+    stars.push({
+        x:Math.random()*canvas.width,
+        y:Math.random()*canvas.height,
+        size:Math.random()*2,
+        speed:Math.random()*2+0.5
+    });
 }
 
-const intervalo = setInterval(crearEstrella, 500);
+function animate(){
+    ctx.fillStyle="#050816";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
 
-const timer = setInterval(() => {
-    tiempo--;
+    ctx.fillStyle="white";
 
-    if(tiempo <= 0){
-        clearInterval(intervalo);
-        clearInterval(timer);
+    stars.forEach(star=>{
+        ctx.beginPath();
+        ctx.arc(star.x,star.y,star.size,0,Math.PI*2);
+        ctx.fill();
 
-        document.getElementById("finish").style.display = "block";
-        document.getElementById("finalScore").innerHTML =
-        "Conseguiste " + puntos + " puntos";
-    }
-},1000);
+        star.y += star.speed;
+
+        if(star.y > canvas.height){
+            star.y = 0;
+            star.x = Math.random()*canvas.width;
+        }
+    });
+
+    requestAnimationFrame(animate);
+}
+
+animate();
+
+window.addEventListener("resize",()=>{
+    canvas.width=window.innerWidth;
+    canvas.height=window.innerHeight;
+});
 
 function entrar(){
-    // Cambia esta URL por tu página principal
-    window.location.href = "home.html";
+    alert("Bienvenido a GLAXS 🚀");
 }
 </script>
 
