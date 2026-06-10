@@ -1,0 +1,16 @@
+name: Build and Save Docker Image
+on: [push, workflow_dispatch]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Image
+        run: docker build -t Glaxs.
+      - name: Archive Image
+        run: docker save -o Glaxs.tar mi-sitio-web
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-tar-image
+          path: Glaxs.tar
